@@ -65,28 +65,7 @@ async function fetchDataEurostat(setDate) { // functie in care imi construiesc a
 function proceseazaDatele(dateRaw, dataSet) {
     const processedData = [];
 
-    for (const country of Object.keys(dateRaw.value)) { //merg pe fiecare inregistrare country
-        for (const time of Object.keys(dateRaw.value[country])) { // merg pe fiecare inregistrare time pentru country-ul in care sunt
-            const valoareIndicator = dateRaw.value[country][time]; // memorez valoarea indicatorului pentru annul si tara curente
-            
-            let indicator;
-            if(dataSet.includes('demo_mlexpec')) {
-                indicator = 'SV';
-            }
-            if(dataSet.includes('sdg_08')) {
-                indicator = 'PIB';
-            }
-            if(dataSet.includes('demo_pjan')) {
-                indicator = 'POP';
-            }
-
-            processedData.push({
-                tara: country,
-                an: time,
-                indicator: indicator,
-                valoare: parseFloat(valoareIndicator)
-            });
-        }
-    }
+    
+    
     return processedData;
 }
