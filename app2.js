@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchAndFormatData();
 });
 
+
 async function fetchAndFormatData() {
     try {
 
@@ -12,7 +13,9 @@ async function fetchAndFormatData() {
 
         const datePIB = await fetchDataEurostat('sdg_08_10?na_item=B1GQ&unit=CLV10_EUR_HAB');
 
-        // const toateDatele = [...dateSperantaViata, ...datePopulatie, ...datePIB];
+        // const toateDatele = [...dateSperantaViata , ...datePopulatie, ...datePIB];
+
+        // console.log(toateDatele);
 
         // toateDatele.sort((a,b) => {
         //     if(a.indicator > b.indicator) return -1;
@@ -49,22 +52,21 @@ async function fetchAndFormatData() {
 
 async function fetchDataEurostat(setDate) { // functie in care imi construiesc apelul API si lansez cererea, apoi returnez datele
     const urlBaza = 'https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/';
-    const tari = ['BE', 'BG', 'CZ', 'DK', 'DE', 'EE', 'IE', 'EL', 'ES', 'FR', 'HR', 'IT', 'CY', 'LV', 'LT', 'LU', 'HU', 'MT', 'NL', 'AT', 'PL', 'PT', 'RO', 'SI', 'SK', 'FI', 'SE'];
+    const tari = ['RO'];
+    // const format = '?format=JSON';
 
     const urlFinal = `${urlBaza}${setDate}&geo=${tari.join('&geo=')}`; //construiesc URL-ul concatenand datele memorate in variabilele scrise intre {}. La countries, clauza join imi separa valoarile din vector cu string-ul dintre paranteze
 
     const raspuns = await fetch(urlFinal);
-    const dateRaw = await raspuns;
 
-    console.log(dateRaw);
+    console.log(raspuns);
 
-    return proceseazaDatele(dateRaw, setDate);
+    return raspuns;
+    // return proceseazaDatele(raspuns, setDate);
 }
 
-function proceseazaDatele(dateRaw, dataSet) {
+function proceseazaDatele(raspuns, dataSet) {
     const processedData = [];
-
-    
     
     return processedData;
 }
