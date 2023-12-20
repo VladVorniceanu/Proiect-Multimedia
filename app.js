@@ -12,34 +12,7 @@ async function fetchAndFormatData() {
 
         const datePIB = await fetchDataEurostat('sdg_08_10?na_item=B1GQ&unit=CLV10_EUR_HAB');
 
-        // const toateDatele = [...dateSperantaViata, ...datePopulatie, ...datePIB];
-
-        // toateDatele.sort((a,b) => {
-        //     if(a.indicator > b.indicator) return -1;
-        //     if(a.indicator < b.indicator) return 1;
-
-        //     if(a.tara>b.tara)return 1;
-        //     if(a.tara<b.tara)return -1;
-        //     return 0;
-        // })
-
-        // // salvez datele intr-un fisier JSON
-        // const jsonData = JSON.stringify(toateDatele,null,2);
-        // const blob = new Blob ([jsonData], {type: 'application/json' });
-
-        // const a = document.createElement('a');
-        // a.href = URL.createObjectURL(blob);
-        // a.download = 'dateEuroStat.json';
-
-        // // Creăm un eveniment de click pentru elementul a
-        // const clickEvent = new MouseEvent('click', {
-        //     bubbles: true,
-        //     cancelable: true,
-        //     view: window
-        // });
-
-        // // Simulăm un click pe elementul a pentru a declanșa descărcarea
-        // a.dispatchEvent(clickEvent);
+        
 
         console.log('Datele au fost formatate și salvate cu succes în media/dateEuroStat.json');
     } catch (error) {
@@ -49,22 +22,64 @@ async function fetchAndFormatData() {
 
 async function fetchDataEurostat(setDate) { // functie in care imi construiesc apelul API si lansez cererea, apoi returnez datele
     const urlBaza = 'https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/';
-    const tari = ['BE', 'BG', 'CZ', 'DK', 'DE', 'EE', 'IE', 'EL', 'ES', 'FR', 'HR', 'IT', 'CY', 'LV', 'LT', 'LU', 'HU', 'MT', 'NL', 'AT', 'PL', 'PT', 'RO', 'SI', 'SK', 'FI', 'SE'];
+    const tari = ['AT', 'BE', 'BG', 'CZ', 'CY', 'DE', 'DK', 'EE', 'EL', 'ES', 'FI', 'FR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU', 'LV', 'MT', 'NL', 'PL', 'PT', 'RO', 'SE', 'SI', 'SK'];
+    const format = '?format=JSON';
+    const urlFinal = `${urlBaza}${setDate}&geo=${tari.join('&geo=')}&sinceTimePeriod=2007&untilTimePeriod=2021`;
 
-    const urlFinal = `${urlBaza}${setDate}&geo=${tari.join('&geo=')}`; //construiesc URL-ul concatenand datele memorate in variabilele scrise intre {}. La countries, clauza join imi separa valoarile din vector cu string-ul dintre paranteze
+    const response = await fetch(urlFinal);
 
-    const raspuns = await fetch(urlFinal);
-    const dateRaw = await raspuns;
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
 
-    console.log(dateRaw);
+    const text = await response.text();
+    const dateRaw = JSON.parse(text);   
+    console.log(dateRaw); // Adăugați această linie pentru a examina conținutul obiectului dateRaw
 
     return proceseazaDatele(dateRaw, setDate);
 }
 
-function proceseazaDatele(dateRaw, dataSet) {
-    const processedData = [];
+function proceseazaDatele(dateRaw, setDate) {
+    const result = [];
+    var indicator = ""
+    switch (setDate) {
+        case "demo_mlexpec?sex=T&age=Y1":
+            indicator = "SV";
+            break;
+        case "demo_pjan?sex=T&age=TOTAL":
+            indicator = "POP";
+            break;
+        case "sdg_08_10?na_item=B1GQ&unit=CLV10_EUR_HAB":
+            indicator = "PIB";
+            break;
+    }
 
-    
-    
-    return processedData;
+    if (dateRaw.dimension && dateRaw.dimension.geo && dateRaw.dimension.time) {
+        const countries = Object.keys(dateRaw.dimension.geo.category.index);
+        const years = Object.keys(dateRaw.dimension.time.category.label);
+        const values = dateRaw.value;
+
+        for (let countryIndex = 0; countryIndex < countries.length; countryIndex++) {
+            const country = countries[countryIndex];
+            const startIndex = countryIndex * years.length; // Indexul de la care incep valorile pentru tara curenta
+
+            for (let yearIndex = 0; yearIndex < years.length; yearIndex++) {
+                const year = years[yearIndex];
+                const value = values[startIndex + yearIndex];
+
+                if (value !== undefined) {
+                    const entry = {
+                        tara: country,
+                        an: year,
+                        indicator: indicator,
+                        valoare: value,
+                    };
+                    result.push(entry);
+                }
+            }
+        }
+    }
+
+    console.log(result);
+    return result;
 }
