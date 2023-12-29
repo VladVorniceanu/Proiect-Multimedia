@@ -198,21 +198,44 @@ function afiseazaBubbleChart() {
     const maxPIB = Math.max(...dateAn.map(entry => entry.valoare));
     const scala = canvas.width / maxPIB / 10;
 
-    dateAn.forEach(entry => {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const r = entry.valoare * scala
+    const bulePerSecunda = 1;
+    // Numărul total de bule afișate până acum
+    let buleAfișate = 0;
 
-        context.beginPath();
-        context.arc(x, y, r, 0, 2 * Math.PI);
-        context.fillStyle = 'rgba(200,0,0, 0.5)';
-        context.fill();
-        context.stroke();
+    // Funcție pentru animația bulelor
+    function animateBule() {
+        // Verificăm dacă am ajuns la numărul maxim de bule
+        if (buleAfișate < dateAn.length) {
+            // Desenăm bulele în funcție de numărul curent de bule afișate
+            for (let i = 0; i < bulePerSecunda && buleAfișate < dateAn.length; i++) {
+                const entry = dateAn[buleAfișate];
+                const x = Math.random() * (canvas.width - entry.valoare / 10 * scala);
+                const y = Math.random() * (canvas.height - entry.valoare / 10 * scala);
+                const r = entry.valoare * scala; // Raza bublei în funcție de valoarea PIB-ului
 
-        context.fillStyle = 'black';
-        context.textAlign = 'center';
-        context.textBaseline = 'middle';
-        context.font = '12px Arial';
-        context.fillText(`${entry.tara},PIB:${entry.valoare}`, x, y);
-    });
+                // Desenăm bulă
+                context.beginPath();
+                context.arc(x + r, y + r, r, 0, 2 * Math.PI);
+                context.fillStyle = 'rgba(200, 0, 0, 0.5)'; // Culoare albastră semi-transparentă
+                context.fill();
+                context.stroke();
+
+                // Adăugăm eticheta cu valoarea în centru
+                context.fillStyle = 'black';
+                context.textAlign = 'center';
+                context.textBaseline = 'middle';
+                context.font = '12px Arial';
+                context.fillText(`${entry.tara}, PIB: ${entry.valoare}`, x + r, y + r);
+
+                // Incrementăm numărul total de bule afișate
+                buleAfișate++;
+            }
+
+            // Solicităm animația pentru următoarea buclă
+            requestAnimationFrame(animateBule);
+        }
+    }
+
+    // Pornim animația
+    animateBule();
 }
