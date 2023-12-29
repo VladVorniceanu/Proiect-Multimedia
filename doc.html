@@ -7,16 +7,25 @@
     <title>Vizualizare Date</title>
 </head>
 <body>
-    <div class="container">
+    <div class="zona-site">
         <h1>Vizualizare Date Uniunea Europeana</h1>
-        <div id="country-selector-container">
-            <label for="country-selector">Selectați țara:</label>
-            <select id="country-selector" onchange="updateChart()">
-                <!-- Opțiunile vor fi adăugate aici dinamic folosind JavaScript -->
-            </select>
-            
-        </div><div id="char-container">
-    </div>
+        <div id="zona-grafic-evo-pop">
+            <h2>Grafic evolutie populatie:</h2>
+            <div id="country-selector-container">
+                <label for="country-selector">Selectați țara:</label>
+                <select id="country-selector" onchange="updateGrafic()"></select>   
+            </div>
+            <svg id="chart-svg" width="1000" height="600"></svg>
+        </div>
+        <div id="zona-grafic-bubble-pib">
+            <h2>Grafic PIB per an:</h2>
+            <div id="year-selector-container">
+                <label for="year-selector">Selectați anul:</label>
+                <select id="year-selector" onchange="afiseazaBubbleChart()"></select>
+            </div>
+            <canvas id="bubble-chart" width="1000" height="600"></canvas>
+        </div>
+
     </div>
     
     <script src="app.js"></script>

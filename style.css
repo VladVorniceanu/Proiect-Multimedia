@@ -4,24 +4,13 @@ body {
     padding: 0;
 }
 
-.container {
-    max-width: 800px;
-    margin: 20px auto;
+.zona-site {
+    justify-content: center;
+    align-content: center;
+    margin-left: 50px;
+    padding: auto;
 }
 
-#chart-container {
-    margin-bottom: 20px;
-    position: relative;
-}
-
-#tooltip {
-    position: absolute;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 10px;
-    display: none;
-}
-
-#table-container {
-    overflow-x: auto;
+#bubble-chart {
+    border: 2px solid black; /* Grosime și culoare pentru border */
 }
