@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset = "UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="3_1094_VORNICEANU_VLAD_IOAN.css">
+    <!-- setez titlul paginii in header-->
+    <title>Vizualizare Date</title> 
+</head>
+<body>
+    <!-- Definesc zona continutului pt aplicatia web -->
+    <div class="zona-site">
+        <!-- am pus un subtitlu -->
+        <h1>Vizualizare Date Uniunea Europeana</h1>
+        <!-- imi fac o zona pentru graficul svg cu evolutia populatiei -->
+        <div id="zona-grafic-evo-pop">
+            <h2>Grafic evolutie populatie:</h2>
+            <!-- am pus titlu pentru zona -->
+            <!-- Imi pun un container in care selectez tara pentru care sa mi se afiseze graficul.  -->
+            <div id="country-selector-container">
+                <label for="country-selector">Selectați țara:</label>
+                <select id="country-selector" onchange="updateGrafic()"></select>   
+                <!-- am selectat titlul pentru selectorul de tara, am atasat functia 'updateGrafic()' sa fie apleata cand se schimba optiunea selectata in selector -->
+            </div>
+            <svg id="chart-svg" width="950" height="480"></svg>
+            <!-- am declarat un element de tip SVG in care voi desena graficul svg -->
+        </div>
+        <div id="zona-grafic-bubble-pib">
+            <!-- am declarat zona in care afisez bubble-chart-ul pentru PIB-uri -->
+            <h2>Grafic PIB per an:</h2>
+            <div id="year-selector-container">
+                <label for="year-selector">Selectați anul:</label>
+                <select id="year-selector" onchange="afiseazaBubbleChart()"></select>
+                <!-- mi-am declarat un selector in care selectez anul pentru care sa afisez datele -->
+            </div>
+            <canvas id="bubble-chart" width="1000" height="600"></canvas>
+            <!-- am delcarat o zona canvas in care voi desena bubble-chart-ul -->
+        </div>
+
+    </div>
+    
+    <script src="3_1094_VORNICEANU_VLAD_IOAN.js"></script>
+    <!-- specific ca script-ul pentru aplciatia web se afla in fisierul app.js -->
+</body>
+</html>
